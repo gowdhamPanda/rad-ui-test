@@ -1,0 +1,287 @@
+import { test, expect } from '@playwright/test';
+import { delay, doLogin, generateRandomNumberString, generateRandomString } from "../../../../../utils/utils";
+import { routeslist } from '../../../../router.const'
+import { getBaseUrl } from '../../../../../../config';
+import { storeVariables } from '../../../../../utils/constant';
+const storeName = `store-name-${new Date().getTime()}`;
+const newstoreName = `new-store-name-${new Date().getTime()}`;
+test.describe("Verify the functionalities of Store Dashboard Page for CMMS", async () => {
+  test("Create Store", async ({ page }) => {
+    await doLogin(page);
+    await page.goto(`${getBaseUrl()}${routeslist.STORE}`);
+
+    await page.getByRole("button", { name: storeVariables.operation.create }).click();
+    await page.getByPlaceholder(storeVariables.NamePlaceholder).waitFor();
+    await page.getByPlaceholder(storeVariables.NamePlaceholder).click();
+    await page.getByPlaceholder(storeVariables.NamePlaceholder).fill(storeName);
+    await page.getByPlaceholder(storeVariables.CodePlaceholder).click();
+    await page.getByPlaceholder(storeVariables.CodePlaceholder).fill(generateRandomString(8));
+    await page.getByPlaceholder(storeVariables.StreetOnePlaceholder).click();
+    await page.getByPlaceholder(storeVariables.StreetOnePlaceholder).fill(generateRandomString(8));
+    await page.getByPlaceholder(storeVariables.StreetTwoPlaceholder).click();
+    await page.getByPlaceholder(storeVariables.StreetTwoPlaceholder).fill(generateRandomString(8));
+    await page.getByPlaceholder(storeVariables.CityPlaceholder).click();
+    await page.getByPlaceholder(storeVariables.CityPlaceholder).fill(generateRandomString(8));
+    await page.getByPlaceholder(storeVariables.CountryPlaceholder).click();
+    await page.getByPlaceholder(storeVariables.CountryPlaceholder).fill(generateRandomString(8));
+    await page.getByPlaceholder(storeVariables.StatePlaceholder).click();
+    await page.getByPlaceholder(storeVariables.StatePlaceholder).fill(generateRandomString(8));
+    await page.getByPlaceholder(storeVariables.PincodePlaceholder).click();
+    await page.getByPlaceholder(storeVariables.PincodePlaceholder).fill(generateRandomString(8));
+    await page.getByPlaceholder(storeVariables.RegionPlaceholder).click();
+    await page.getByPlaceholder(storeVariables.RegionPlaceholder).fill(generateRandomString(8));
+    await page.getByPlaceholder(storeVariables.LatitudePlaceholder).click();
+    await page.getByPlaceholder(storeVariables.LatitudePlaceholder).fill(generateRandomNumberString(8));
+    await page.getByPlaceholder(storeVariables.LongitudePlaceholder).click();
+    await page.getByPlaceholder(storeVariables.LongitudePlaceholder).fill(generateRandomNumberString(8));
+    await page.getByPlaceholder(storeVariables.GoogleMapLinkPlaceholder).click();
+    await page.getByPlaceholder(storeVariables.GoogleMapLinkPlaceholder).fill(generateRandomString(8));
+    await page.locator(storeVariables.PlantdropdownSelector).click();
+    await delay(3000);
+    await page.keyboard.press(storeVariables.Enter);
+    await page.locator(storeVariables.StorekeeperdropdownSelector).click();
+    await delay(3000);
+    await page.keyboard.press(storeVariables.Enter);
+    await delay(3000);
+    await page.getByRole('button', { name: storeVariables.operation.submit }).click();
+    await delay(3000);
+    await expect(page.getByText(storeVariables.CreateSuccess)).toBeVisible();
+    await page.goto(`${getBaseUrl()}${routeslist.STORE}`); 
+  });
+
+    test("Testing Alert while creating Store", async ({ page }) => {
+      await doLogin(page);
+      await page.goto(`${getBaseUrl()}${routeslist.STORE}`);
+  
+      await page.getByRole("button", { name: storeVariables.operation.create }).click();
+      await page.getByPlaceholder(storeVariables.NamePlaceholder).click();
+      await page.getByPlaceholder(storeVariables.NamePlaceholder).fill(storeName);
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await expect(page.getByText(storeVariables.NameAlert)).toBeVisible();
+      await page.getByPlaceholder(storeVariables.CodePlaceholder).click();
+      await page.getByPlaceholder(storeVariables.CodePlaceholder).fill(generateRandomString(8));
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await expect(page.getByText(storeVariables.CodeAlert)).toBeVisible();
+      await page.getByPlaceholder(storeVariables.CodePlaceholder).click();
+      await page.getByPlaceholder(storeVariables.CodePlaceholder).fill(generateRandomString(7));
+      await expect(page.getByText(storeVariables.CodeSizeAlert)).toBeVisible();
+      await page.getByPlaceholder(storeVariables.StreetTwoPlaceholder).click();
+      await page.getByPlaceholder(storeVariables.StreetTwoPlaceholder).fill(generateRandomString(8));
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await expect(page.getByText(storeVariables.StreetTwoAlert)).toBeVisible();
+      await page.getByPlaceholder(storeVariables.StreetOnePlaceholder).click();
+      await page.getByPlaceholder(storeVariables.StreetOnePlaceholder).fill(generateRandomString(8));
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await expect(page.getByText(storeVariables.StreetOneAlert)).toBeVisible(); 
+      await page.getByPlaceholder(storeVariables.CityPlaceholder).click();
+      await page.getByPlaceholder(storeVariables.CityPlaceholder).fill(generateRandomString(8));
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await expect(page.getByText(storeVariables.CityAlert)).toBeVisible();
+      await page.getByPlaceholder(storeVariables.CountryPlaceholder).click();
+      await page.getByPlaceholder(storeVariables.CountryPlaceholder).fill(generateRandomString(8));
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await expect(page.getByText(storeVariables.CountryAlert)).toBeVisible();
+      await page.getByPlaceholder(storeVariables.StatePlaceholder).click();
+      await page.getByPlaceholder(storeVariables.StatePlaceholder).fill(generateRandomString(8));
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await expect(page.getByText(storeVariables.StateAlert)).toBeVisible();
+      await page.getByPlaceholder(storeVariables.PincodePlaceholder).click();
+      await page.getByPlaceholder(storeVariables.PincodePlaceholder).fill(generateRandomString(8));
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await expect(page.getByText(storeVariables.PincodeAlert)).toBeVisible();
+      await page.getByPlaceholder(storeVariables.RegionPlaceholder).click();
+      await page.getByPlaceholder(storeVariables.RegionPlaceholder).fill(generateRandomString(8));
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await expect(page.getByText(storeVariables.RegionAlert)).toBeVisible();
+      await page.getByPlaceholder(storeVariables.LatitudePlaceholder).click();
+      await page.getByPlaceholder(storeVariables.LatitudePlaceholder).fill(generateRandomNumberString(8));
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await expect(page.getByText(storeVariables.LatitudeAlert)).toBeVisible();
+      await page.getByPlaceholder(storeVariables.LongitudePlaceholder).click();
+      await page.getByPlaceholder(storeVariables.LongitudePlaceholder).fill(generateRandomNumberString(8));
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await expect(page.getByText(storeVariables.LongitudeAlert)).toBeVisible();
+      await page.getByPlaceholder(storeVariables.GoogleMapLinkPlaceholder).click();
+      await page.getByPlaceholder(storeVariables.GoogleMapLinkPlaceholder).fill(generateRandomString(8));
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await expect(page.getByText(storeVariables.GoogleMapLinkAlert)).toBeVisible(); 
+      await page.locator(storeVariables.PlantdropdownSelector).click();
+      await delay(3000);
+      await page.keyboard.press(storeVariables.Enter);
+      await page.keyboard.press(storeVariables.Delete);
+      await expect(page.getByText(storeVariables.PlantAlert)).toBeVisible();
+      await page.locator(storeVariables.StorekeeperdropdownSelector).click();
+      await delay(3000);
+      await page.keyboard.press(storeVariables.Enter);
+      await page.keyboard.press(storeVariables.Delete);
+      await expect(page.getByText(storeVariables.StorekeeperAlert)).toBeVisible();
+    });
+
+    test("Edit Store", async ({ page }) => {
+      await doLogin(page);
+      await page.goto(`${getBaseUrl()}${routeslist.STORE}`);
+      await delay(3000);
+      await page.getByText(storeName).click();
+      await page.getByPlaceholder(storeVariables.NamePlaceholder).click();
+      await delay(3000);
+      await page.getByPlaceholder(storeVariables.NamePlaceholder).fill(newstoreName);
+      await page.getByPlaceholder(storeVariables.StreetOnePlaceholder).click();
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await page.getByPlaceholder(storeVariables.StreetOnePlaceholder).fill(generateRandomString(8));
+      await page.getByPlaceholder(storeVariables.StreetTwoPlaceholder).click();
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await page.getByPlaceholder(storeVariables.StreetTwoPlaceholder).fill(generateRandomString(8));
+      await page.getByPlaceholder(storeVariables.CityPlaceholder).click();
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await page.getByPlaceholder(storeVariables.CityPlaceholder).fill(generateRandomString(8));
+      await page.getByPlaceholder(storeVariables.CountryPlaceholder).click();
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await page.getByPlaceholder(storeVariables.CountryPlaceholder).fill(generateRandomString(8));
+      await page.getByPlaceholder(storeVariables.StatePlaceholder).click();
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await page.getByPlaceholder(storeVariables.StatePlaceholder).fill(generateRandomString(8));
+      await page.getByPlaceholder(storeVariables.PincodePlaceholder).click();
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await page.getByPlaceholder(storeVariables.PincodePlaceholder).fill(generateRandomString(8));
+      await page.getByPlaceholder(storeVariables.RegionPlaceholder).click();
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await page.getByPlaceholder(storeVariables.RegionPlaceholder).fill(generateRandomString(8));
+      await page.getByPlaceholder(storeVariables.LatitudePlaceholder).click();
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await page.getByPlaceholder(storeVariables.LatitudePlaceholder).fill(generateRandomNumberString(8));
+      await page.getByPlaceholder(storeVariables.LongitudePlaceholder).click();
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await page.getByPlaceholder(storeVariables.LongitudePlaceholder).fill(generateRandomNumberString(8));
+      await page.getByPlaceholder(storeVariables.GoogleMapLinkPlaceholder).click();
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await page.getByPlaceholder(storeVariables.GoogleMapLinkPlaceholder).fill(generateRandomString(8));
+      await page.getByRole('button', { name: storeVariables.operation.submit }).click();
+      await expect(page.getByText(storeVariables.UpdateSuccess)).toBeVisible();
+      await page.goto(`${getBaseUrl()}${routeslist.STORE}`); 
+    });
+
+    test("Testing Alert while updating Store", async ({ page }) => {
+      await doLogin(page);
+      await page.goto(`${getBaseUrl()}${routeslist.STORE}`);
+      await delay(3000);
+      await page.getByText(newstoreName).click();
+      await delay(3000);
+      await page.getByPlaceholder(storeVariables.NamePlaceholder).click();
+      await page.getByPlaceholder(storeVariables.NamePlaceholder).fill(newstoreName);
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await expect(page.getByText(storeVariables.NameAlert)).toBeVisible();
+      await page.getByPlaceholder(storeVariables.StreetOnePlaceholder).click();
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await expect(page.getByText(storeVariables.StreetOneAlert)).toBeVisible()
+      await page.getByPlaceholder(storeVariables.StreetTwoPlaceholder).click();
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await expect(page.getByText(storeVariables.StreetTwoAlert)).toBeVisible()
+      await page.getByPlaceholder(storeVariables.CityPlaceholder).click();
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await expect(page.getByText(storeVariables.CityAlert)).toBeVisible()
+      await page.getByPlaceholder(storeVariables.CountryPlaceholder).click();
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await expect(page.getByText(storeVariables.CountryAlert)).toBeVisible()
+      await page.getByPlaceholder(storeVariables.StatePlaceholder).click();
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await expect(page.getByText(storeVariables.StateAlert)).toBeVisible()
+      await page.getByPlaceholder(storeVariables.PincodePlaceholder).click();
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await expect(page.getByText(storeVariables.PincodeAlert)).toBeVisible()
+      await page.getByPlaceholder(storeVariables.RegionPlaceholder).click();
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await expect(page.getByText(storeVariables.RegionAlert)).toBeVisible()
+      await page.getByPlaceholder(storeVariables.LatitudePlaceholder).click();
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await expect(page.getByText(storeVariables.LatitudeAlert)).toBeVisible()
+      await page.getByPlaceholder(storeVariables.LongitudePlaceholder).click();
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await expect(page.getByText(storeVariables.LongitudeAlert)).toBeVisible()
+      await page.getByPlaceholder(storeVariables.GoogleMapLinkPlaceholder).click();
+      await page.keyboard.press(storeVariables.Select);
+      await page.keyboard.press(storeVariables.Delete);
+      await expect(page.getByText(storeVariables.GoogleMapLinkAlert)).toBeVisible()
+      await page.goto(`${getBaseUrl()}${routeslist.STORE}`); 
+    });
+
+    test("Validate Store Exist Already", async ({ page }) => {
+      await doLogin(page);
+      await page.goto(`${getBaseUrl()}${routeslist.STORE}`);
+      await delay(3000);
+      await page.getByRole("button", { name: storeVariables.operation.create }).click();
+      await delay(3000);
+      await page.getByPlaceholder(storeVariables.NamePlaceholder).click();
+      await page.getByPlaceholder(storeVariables.NamePlaceholder).fill(newstoreName);
+      await page.getByPlaceholder(storeVariables.CodePlaceholder).click();
+      await page.getByPlaceholder(storeVariables.CodePlaceholder).fill(generateRandomString(8));
+      await page.getByPlaceholder(storeVariables.StreetOnePlaceholder).click();
+      await page.getByPlaceholder(storeVariables.StreetOnePlaceholder).fill(generateRandomString(8));
+      await page.getByPlaceholder(storeVariables.StreetTwoPlaceholder).click();
+      await page.getByPlaceholder(storeVariables.StreetTwoPlaceholder).fill(generateRandomString(8));
+      await page.getByPlaceholder(storeVariables.CityPlaceholder).click();
+      await page.getByPlaceholder(storeVariables.CityPlaceholder).fill(generateRandomString(8));
+      await page.getByPlaceholder(storeVariables.CountryPlaceholder).click();
+      await page.getByPlaceholder(storeVariables.CountryPlaceholder).fill(generateRandomString(8));
+      await page.getByPlaceholder(storeVariables.StatePlaceholder).click();
+      await page.getByPlaceholder(storeVariables.StatePlaceholder).fill(generateRandomString(8));
+      await page.getByPlaceholder(storeVariables.PincodePlaceholder).click();
+      await page.getByPlaceholder(storeVariables.PincodePlaceholder).fill(generateRandomString(8));
+      await page.getByPlaceholder(storeVariables.RegionPlaceholder).click();
+      await page.getByPlaceholder(storeVariables.RegionPlaceholder).fill(generateRandomString(8));
+      await page.getByPlaceholder(storeVariables.LatitudePlaceholder).click();
+      await page.getByPlaceholder(storeVariables.LatitudePlaceholder).fill(generateRandomNumberString(8));
+      await page.getByPlaceholder(storeVariables.LongitudePlaceholder).click();
+      await page.getByPlaceholder(storeVariables.LongitudePlaceholder).fill(generateRandomNumberString(8));
+      await page.getByPlaceholder(storeVariables.GoogleMapLinkPlaceholder).click();
+      await page.getByPlaceholder(storeVariables.GoogleMapLinkPlaceholder).fill(generateRandomString(8));
+      await page.locator(storeVariables.PlantdropdownSelector).click();
+      await page.keyboard.press(storeVariables.Enter);
+      await page.locator(storeVariables.StorekeeperdropdownSelector).click();
+      await page.keyboard.press(storeVariables.Enter);
+      await page.getByRole('button', { name: storeVariables.operation.submit }).click();
+      await expect(page.getByText(storeVariables.NameExistValidation)).toBeVisible();
+      await page.goto(`${getBaseUrl()}${routeslist.STORE}`); 
+    });
+
+    // test("Delete Store", async ({ page }) => {
+    //   await doLogin(page);
+    //   await page.goto(`${getBaseUrl()}${routeslist.STORE}`);
+    //   const deleteButtonSelector = `tr.ant-table-row:has-text("${newstoreName}") button[ nztype="primary"][nzdanger=""]`;
+    //   await page.locator(deleteButtonSelector).click();
+    //   await page.getByRole("button", { name: "OK" }).click();
+    //   await expect(
+    //   page.getByText(storeVariables.DeleteSuccess)).toBeVisible();
+    // })
+  });
